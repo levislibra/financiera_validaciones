@@ -1,0 +1,160 @@
+<openerp>
+  <data>
+
+		<record id="financiera_partner_validacion_identidad_form" model="ir.ui.view">
+			<field name="name">res.partner</field>
+			<field name="model">res.partner</field>
+			<field name="arch" type="xml">
+				<form style="background-color:#E6E6E6">
+					<header>
+						<field name="state" widget="statusbar" clickable="True"/>
+						<field name="app_portal_state" invisible="1" widget="statusbar"/>
+					</header>
+					<sheet style="background-color:#E6E6E6">
+						<script>
+							$(document).ready(function(){
+								$('.modal-dialog').css({'width': '97%', 'height': '97%'});
+								$('.modal-content').css({'height': '100%'});
+								$('.modal-body').css({'height': '100%'});
+							});
+						</script>
+						<group col="4">
+							<group col="1">
+								<div>
+									<img src="financiera_app/static/description/check.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_personales', '!=', 'aprobado')]}"/>
+									<img src="financiera_app/static/description/waiting.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_personales', '!=', 'manual')]}"/>
+									<img src="financiera_app/static/description/uncheck.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_personales', '!=', 'rechazado')]}"/>
+									<label string="Datos personales" style="margin-left:0px;font-size:24px"/>
+								</div>
+								<field name="name" invisible="1"/>
+								<field name="main_id_number" invisible="1"/>
+								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_personales', '!=', 'manual')]}"/>
+								<field name="app_nombre" attrs="{'required': [('app_datos_personales', '=', 'aprobado')]}"/>
+								<field name="app_apellido" attrs="{'required': [('app_datos_personales', '=', 'aprobado')]}"/>
+								<field name="app_documento" attrs="{'required': [('app_datos_personales', '=', 'aprobado')]}"/>
+								<field name="app_nacimiento" attrs="{'required': [('app_datos_personales', '=', 'aprobado')]}"/>
+								<field name="app_datos_personales_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_personales', '!=', 'rechazado')], 'required': [('app_datos_personales', '=', 'rechazado')]}"/>
+							</group>
+							<group col="1">
+								<div>
+									<img src="financiera_app/static/description/check.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_dni_frontal', '!=', 'aprobado')]}"/>
+									<img src="financiera_app/static/description/waiting.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_dni_frontal', '!=', 'manual')]}"/>
+									<img src="financiera_app/static/description/uncheck.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_dni_frontal', '!=', 'rechazado')]}"/>
+									<label string="DNI frontal" style="margin-left:0px;font-size:24px"/>
+								</div>
+								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_dni_frontal', '!=', 'manual')]}"/>
+								<field name="app_dni_frontal" widget="image" class="oe_avatar" attrs="{'required': [('app_datos_dni_frontal', '=', 'aprobado')]}"/>
+								<field name="app_dni_frontal_download_name" invisible="1"/>
+								<field name="app_datos_dni_frontal_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_dni_frontal', '!=', 'rechazado')], 'required': [('app_datos_dni_frontal', '=', 'rechazado')]}"/>
+							</group>
+							<group col="1">
+								<div>
+									<img src="financiera_app/static/description/check.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_dni_posterior', '!=', 'aprobado')]}"/>
+									<img src="financiera_app/static/description/waiting.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_dni_posterior', '!=', 'manual')]}"/>
+									<img src="financiera_app/static/description/uncheck.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_dni_posterior', '!=', 'rechazado')]}"/>
+									<label string="DNI dorso" style="margin-left:0px;font-size:24px"/>
+								</div>
+								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_dni_posterior', '!=', 'manual')]}"/>
+								<field name="app_dni_posterior" widget="image" class="oe_avatar"
+								attrs="{'required': [('app_datos_dni_posterior', '=', 'aprobado')]}" style="border-radius: 8px;width:100px"/>
+								<field name="app_datos_dni_posterior_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_dni_posterior', '!=', 'rechazado')], 'required': [('app_datos_dni_posterior', '=', 'rechazado')]}"/>
+							</group>
+							<group col="1">
+								<div>
+									<img src="financiera_app/static/description/check.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_selfie', '!=', 'aprobado')]}"/>
+									<img src="financiera_app/static/description/waiting.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_selfie', '!=', 'manual')]}"/>
+									<img src="financiera_app/static/description/uncheck.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_selfie', '!=', 'rechazado')]}"/>
+									<label string="Selfie" style="margin-left:0px;font-size:24px"/>
+								</div>
+								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_selfie', '!=', 'rechazado')]}"/>
+								<field name="app_selfie" widget="image" class="oe_avatar" attrs="{'required': [('app_datos_selfie', '=', 'aprobado')]}"/>
+								<field name="app_datos_selfie_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_selfie', '!=', 'rechazado')], 'required': [('app_datos_selfie', '=', 'rechazado')]}"/>
+							</group>
+						</group>
+						<group col="4">
+							<group col="1">
+								<field name="app_datos_personales" required="1"/>
+							</group>
+							<group col="1">
+								<field name="app_datos_dni_frontal" required="1"/>
+							</group>
+							<group col="1">
+								<field name="app_datos_dni_posterior" required="1"/>
+							</group>
+							<group col="1">
+								<field name="app_datos_selfie" required="1"/>
+							</group>
+						</group>
+					</sheet>
+					<footer>
+						<button name="button_validar_identidad_finalizar" type="object" string="Guardar" class="oe_highlight"/>
+            <button name="cancel" string="Cancel" special="cancel" class="oe_link"/> 
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="financiera_partner_validacion_domicilio_form" model="ir.ui.view">
+			<field name="name">res.partner</field>
+			<field name="model">res.partner</field>
+			<field name="arch" type="xml">
+				<form style="background-color:#E6E6E6">
+					<header>
+						<field name="state" widget="statusbar"/>
+						<field name="app_portal_state" invisible="1" widget="statusbar"/>
+					</header>
+					<sheet style="background-color:#E6E6E6">
+						<script>
+							$(document).ready(function(){
+								$('.modal-dialog').css({'width': '97%', 'height': '97%'});
+								$('.modal-content').css({'height': '100%'});
+								$('.modal-body').css({'height': '100%'});
+							});
+						</script>
+						<group col="4">
+							<group col="1">
+								<div>
+									<img src="financiera_app/static/description/check.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_domicilio', '!=', 'aprobado')]}"/>
+									<img src="financiera_app/static/description/waiting.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_domicilio', '!=', 'manual')]}"/>
+									<img src="financiera_app/static/description/uncheck.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
+									<label string="Domicilio" style="margin-left:0px;font-size:24px"/>
+								</div>
+								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_domicilio', '!=', 'manual')]}"/>
+								<field name="app_direccion" placeholder="CALLE" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
+								<div>
+									<field name="app_numero" placeholder="NUMERO" class="oe_inline" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
+									<field name="app_cp" placeholder="CP" class="oe_inline" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
+								</div>
+								<field name="app_telefono" required="0"/>
+								<field name="app_localidad" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
+								<field name="app_portal_provincia" options="{'no_quick_create':True,'no_create_edit':True, 'no_open':True}" domain="[('country_id', '=', 11)]" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
+								<field name="app_provincia" invisible="1"/>
+								<field name="app_datos_domicilio_error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_domicilio', '!=', 'rechazado')], 'required': [('app_datos_domicilio', '=', 'rechazado')]}"/>
+							</group>
+							<group name="documento" col="1">
+								<label string="Documento de prueba" style="margin-left:0px;font-size:24px"/>
+								<field name="app_domicilio_documento" class="oe_avatar" readonly="1"/>
+								<field name="app_domicilio_documento_download" string=" " readonly="0"/>
+							</group>
+							<!-- <group name="buro"></group> -->
+						</group>
+						<group col="4">
+							<group col="1">
+								<field name="app_datos_domicilio" required="1"/>
+							</group>
+							<group></group>
+							<group></group>
+							<group></group>
+						</group>
+					</sheet>
+					<footer>
+						<button name="button_validar_domicilio_finalizar" type="object" string="Guardar" class="oe_highlight"/>
+            <button name="cancel" string="Cancel" special="cancel" class="oe_link"/> 
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+	</data>
+</openerp>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+	<record model="ir.module.category" id="validaicones_management">
+	  <field name="name">Validaciones</field>
+	  <field name="description">Nivel de acceso</field>
+	  <field name="sequence">50</field>
+  </record>
+
+  <record id="user" model="res.groups">
+   <field name="name">Usuario</field>
+   <field name="category_id" ref="validaicones_management"/>
+  </record>
+
+    <record id="manager" model="res.groups">
+     <field name="name">Administrador</field>
+     <field name="implied_ids" eval="[(4, ref('user'))]"/>
+     <field name="category_id" ref="validaicones_management"/>
+    </record>
+
+</data>
+</openerp>

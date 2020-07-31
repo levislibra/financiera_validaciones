@@ -1,0 +1,90 @@
+<openerp>
+  <data>
+
+    <!-- Financiera App configuracion -->
+
+    <record model="ir.ui.view" id="financiera_validacion_tree">
+      <field name="name">financiera.validacion.tree</field>
+      <field name="model">financiera.validacion</field>
+      <field name="arch" type="xml">
+        <tree decoration-danger="state == 'pendiente'" decoration-success="state == 'en_proceso'">
+					<field name="id"/>
+					<field name="name"/>
+					<field name="priority"/>
+					<field name="asigned_id"/>
+					<field name="validation_type"/>
+					<field name="state"/>
+          <field name="company_id" groups="base.group_erp_manager"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="financiera_validacion_form" model="ir.ui.view">
+        <field name="name">financiera.validacion.tree</field>
+        <field name="model">financiera.validacion</field>
+        <field name="arch" type="xml">
+            <form string="Validaciones">
+							<header>
+								<button name="button_procesar" type="object" string="Procesar" states="pendiente" class="oe_highlight"/>
+								<button name="button_finalizar" type="object" string="Finalizar" states="en_proceso" 
+									class="oe_highlight" confirm="Seguro que desea finalizar la Validacion?"/>
+								<field name="state" widget="statusbar"/>
+							</header>
+              <sheet>
+                <group>
+                  <group>
+                    <field name="company_id" groups="base.group_erp_manager"/>
+										<field name="name"/>
+										<field name="priority"/>
+                  </group>
+                  <group>
+										<field name="validation_type"/>
+										<field name="asigned_id" options="{'no_quick_create':True,'no_create_edit':True, 'no_open':True}"/>
+										<field name="active"/>
+									</group>
+								</group>
+								<group name='objeto' string="Objeto a validar">
+									<group>
+										<field name="partner_id" attrs="{'invisible': [('partner_id', '=', None)]}"/>
+									</group>
+									<group></group>
+								</group>
+								<group name='partner_validar_identidad' string="Validar identidad del cliente" attrs="{'invisible': [('validation_type', '!=', 'partner_validar_identidad')]}">
+									<group>
+										<!-- <field name="partner_id"/> -->
+										<label string=" "/><button name="ver_partner_validar_identidad" class="oe_highlight" 
+										string="Validar identidad" type="object" attrs="{'invisible': [('state', '!=', 'en_proceso')]}"/>
+									</group>
+									<group></group>
+								</group>
+								<group name='partner_validar_domicilio' string="Validar domicilio del cliente" attrs="{'invisible': [('validation_type', '!=', 'partner_validar_domicilio')]}">
+									<group>
+										<!-- <field name="partner_id"/> -->
+										<label string=" "/><button name="ver_partner_validar_domicilio" class="oe_highlight" 
+										string="Validar domicilio" type="object" attrs="{'invisible': [('state', '!=', 'en_proceso')]}"/>
+									</group>
+									<group></group>
+								</group>
+              </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="financiera_validacion_action">
+      <field name="name">Validaciones</field>
+      <field name="res_model">financiera.validacion</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="financiera_validacion_tree"/>
+    </record>
+
+    <!-- Top menu item -->
+    
+    <menuitem name="Validaciones" id="menu_validaciones" 
+    web_icon="financiera_validaciones,static/description/icon.png"
+    groups="financiera_validaciones.manager"/>
+    
+		<menuitem name="Validaciones" id="menu_validaciones_action" sequence="10"
+			parent="menu_validaciones" action="financiera_validacion_action"/>
+
+  </data>
+</openerp>
