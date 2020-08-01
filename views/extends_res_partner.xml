@@ -7,7 +7,7 @@
 			<field name="arch" type="xml">
 				<form style="background-color:#E6E6E6">
 					<header>
-						<field name="state" widget="statusbar" clickable="True"/>
+						<field name="state" widget="statusbar" invisible="0"/>
 						<field name="app_portal_state" invisible="1" widget="statusbar"/>
 					</header>
 					<sheet style="background-color:#E6E6E6">
@@ -113,30 +113,36 @@
 						</script>
 						<group col="4">
 							<group col="1">
+								<label string="Domicilio actual validado" style="margin-left:0px;font-size:22px"/>
+								<field name="street" string="Direccion y numero" readonly="1"/>
+								<field name="zip" string="CP" readonly="1"/>
+								<field name="city" readonly="1"/>
+								<field name="state_id" string="Provincia" readonly="1"/>
+							</group>
+							<group col="1">
 								<div>
 									<img src="financiera_app/static/description/check.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_domicilio', '!=', 'aprobado')]}"/>
 									<img src="financiera_app/static/description/waiting.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_domicilio', '!=', 'manual')]}"/>
 									<img src="financiera_app/static/description/uncheck.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
-									<label string="Domicilio" style="margin-left:0px;font-size:24px"/>
+									<label string="Nuevo domicilio" style="margin-left:0px;font-size:22px"/>
 								</div>
 								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_domicilio', '!=', 'manual')]}"/>
-								<field name="app_direccion" placeholder="CALLE" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
+								<label string="Direccion y numero" style="font-weight:bold;"/>
 								<div>
-									<field name="app_numero" placeholder="NUMERO" class="oe_inline" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
-									<field name="app_cp" placeholder="CP" class="oe_inline" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
+									<field name="app_direccion" class="oe_inline" placeholder="CALLE" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
+									<field name="app_numero" class="oe_inline" placeholder="NUMERO" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
 								</div>
-								<field name="app_telefono" required="0"/>
+								<field name="app_cp" placeholder="CP" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
 								<field name="app_localidad" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
 								<field name="app_portal_provincia" options="{'no_quick_create':True,'no_create_edit':True, 'no_open':True}" domain="[('country_id', '=', 11)]" attrs="{'required': [('app_portal_state', '=', 'datos_domicilio')], 'readonly': [('app_datos_domicilio', '!=', 'rechazado')]}"/>
 								<field name="app_provincia" invisible="1"/>
 								<field name="app_datos_domicilio_error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_domicilio', '!=', 'rechazado')], 'required': [('app_datos_domicilio', '=', 'rechazado')]}"/>
 							</group>
 							<group name="documento" col="1">
-								<label string="Documento de prueba" style="margin-left:0px;font-size:24px"/>
+								<label string="Documento de prueba" style="margin-left:0px;font-size:22px"/>
 								<field name="app_domicilio_documento" class="oe_avatar" readonly="1"/>
 								<field name="app_domicilio_documento_download" string=" " readonly="0"/>
 							</group>
-							<!-- <group name="buro"></group> -->
 						</group>
 						<group col="4">
 							<group col="1">
@@ -149,6 +155,63 @@
 					</sheet>
 					<footer>
 						<button name="button_validar_domicilio_finalizar" type="object" string="Guardar" class="oe_highlight"/>
+            <button name="cancel" string="Cancel" special="cancel" class="oe_link"/> 
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="financiera_partner_validacion_cbu_form" model="ir.ui.view">
+			<field name="name">res.partner</field>
+			<field name="model">res.partner</field>
+			<field name="arch" type="xml">
+				<form style="background-color:#E6E6E6">
+					<header>
+						<field name="state" widget="statusbar"/>
+						<field name="app_portal_state" invisible="1" widget="statusbar"/>
+					</header>
+					<sheet style="background-color:#E6E6E6">
+						<script>
+							$(document).ready(function(){
+								$('.modal-dialog').css({'width': '97%', 'height': '97%'});
+								$('.modal-content').css({'height': '100%'});
+								$('.modal-body').css({'height': '100%'});
+							});
+						</script>
+						<group col="4">
+							<group col="1">
+								<label string="CBU actual validado" style="margin-left:0px;font-size:22px"/>
+								<field name="app_cbu_validado" readonly="1"/>
+								<!-- <field name="app_alias_validado" readonly="1"/> -->
+							</group>
+							<group col="1">
+								<div>
+									<img src="financiera_app/static/description/check.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_cbu', '!=', 'aprobado')]}"/>
+									<img src="financiera_app/static/description/waiting.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_cbu', '!=', 'manual')]}"/>
+									<img src="financiera_app/static/description/uncheck.png" style="margin-left:10px;" attrs="{'invisible': [('app_datos_cbu', '!=', 'rechazado')]}"/>
+									<label string="Nuevo CBU" style="margin-left:0px;font-size:22px"/>
+								</div>
+								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_cbu', '!=', 'manual')]}"/>
+								<field name="app_cbu" />
+								<!-- <field name="app_alias" invisible="1"/> -->
+								<field name="app_datos_cbu_error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_cbu', '!=', 'rechazado')], 'required': [('app_datos_cbu', '=', 'rechazado')]}"/>
+							</group>
+							<group name="documento" col="1">
+								<field name="app_cbu_documento" class="oe_avatar" readonly="1"/>
+								<field name="app_cbu_documento_download" string=" " readonly="0"/>
+							</group>
+						</group>
+						<group col="4">
+							<group col="1">
+								<field name="app_datos_cbu" required="1"/>
+							</group>
+							<group></group>
+							<group></group>
+							<group></group>
+						</group>
+					</sheet>
+					<footer>
+						<button name="button_validar_cbu_finalizar" type="object" string="Guardar" class="oe_highlight"/>
             <button name="cancel" string="Cancel" special="cancel" class="oe_link"/> 
 					</footer>
 				</form>

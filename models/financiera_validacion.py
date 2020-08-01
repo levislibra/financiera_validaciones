@@ -58,3 +58,8 @@ class FinancieraValidacion(models.Model):
 	@api.multi
 	def ver_partner_validar_domicilio(self):
 		return self.partner_id.ver_partner_validar_domicilio()
+	
+	# Validar CBU del cliente
+	@api.multi
+	def ver_partner_validar_cbu(self):
+		return self.partner_id.ver_partner_validar_cbu()

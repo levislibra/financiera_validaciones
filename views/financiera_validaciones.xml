@@ -38,30 +38,24 @@
 										<field name="priority"/>
                   </group>
                   <group>
-										<field name="validation_type"/>
 										<field name="asigned_id" options="{'no_quick_create':True,'no_create_edit':True, 'no_open':True}"/>
 										<field name="active"/>
 									</group>
 								</group>
-								<group name='objeto' string="Objeto a validar">
-									<group>
-										<field name="partner_id" attrs="{'invisible': [('partner_id', '=', None)]}"/>
-									</group>
+								<group name='por_validar' col="3">
 									<group></group>
-								</group>
-								<group name='partner_validar_identidad' string="Validar identidad del cliente" attrs="{'invisible': [('validation_type', '!=', 'partner_validar_identidad')]}">
-									<group>
-										<!-- <field name="partner_id"/> -->
-										<label string=" "/><button name="ver_partner_validar_identidad" class="oe_highlight" 
-										string="Validar identidad" type="object" attrs="{'invisible': [('state', '!=', 'en_proceso')]}"/>
-									</group>
-									<group></group>
-								</group>
-								<group name='partner_validar_domicilio' string="Validar domicilio del cliente" attrs="{'invisible': [('validation_type', '!=', 'partner_validar_domicilio')]}">
-									<group>
-										<!-- <field name="partner_id"/> -->
-										<label string=" "/><button name="ver_partner_validar_domicilio" class="oe_highlight" 
-										string="Validar domicilio" type="object" attrs="{'invisible': [('state', '!=', 'en_proceso')]}"/>
+									<group string="Por validar" col="1">
+										<!-- Tipo de validacion -->
+										<field name="validation_type"/>
+										<!-- Objeto por validar -->
+										<field name="partner_id" attrs="{'invisible': [('partner_id', '=', False)]}"/>
+										<!-- Boton de validacion -->
+										<button name="ver_partner_validar_identidad" class="oe_highlight" 
+											string="Validar identidad" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_identidad')]}"/>
+										<button name="ver_partner_validar_domicilio" class="oe_highlight" 
+											string="Validar domicilio" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_domicilio')]}"/>
+										<button name="ver_partner_validar_cbu" class="oe_highlight" 
+											string="Validar CBU" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_cbu')]}"/>
 									</group>
 									<group></group>
 								</group>
