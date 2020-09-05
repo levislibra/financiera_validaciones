@@ -8,11 +8,12 @@
       <field name="model">financiera.validacion</field>
       <field name="arch" type="xml">
         <tree decoration-danger="state == 'pendiente'" decoration-success="state == 'en_proceso'">
-					<field name="id"/>
-					<field name="name"/>
+					<field name="id" invisible="1"/>
 					<field name="priority"/>
-					<field name="asigned_id"/>
+					<field name="partner_id"/>
 					<field name="validation_type"/>
+					<field name="name"/>
+					<field name="asigned_id"/>
 					<field name="state"/>
           <field name="company_id" groups="base.group_erp_manager"/>
         </tree>
@@ -34,7 +35,7 @@
                 <group>
                   <group>
                     <field name="company_id" groups="base.group_erp_manager"/>
-										<field name="name"/>
+										<field name="name" readonly="1"/>
 										<field name="priority"/>
                   </group>
                   <group>
@@ -42,13 +43,13 @@
 										<field name="active"/>
 									</group>
 								</group>
-								<group name='por_validar' col="3">
+								<group name='por_validar' col="3" readonly="1">
 									<group></group>
 									<group string="Por validar" col="1">
 										<!-- Tipo de validacion -->
-										<field name="validation_type"/>
+										<field name="validation_type" attrs="{'readonly': [('state', '!=', 'en_proceso')]}"/>
 										<!-- Objeto por validar -->
-										<field name="partner_id" attrs="{'invisible': [('partner_id', '=', False)]}"/>
+										<field name="partner_id" attrs="{'readonly': [('state', '!=', 'en_proceso')]}"/>
 										<!-- Boton de validacion -->
 										<button name="ver_partner_validar_identidad" class="oe_highlight" 
 											string="Validar identidad" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_identidad')]}"/>
@@ -75,7 +76,7 @@
     
     <menuitem name="Validaciones" id="menu_validaciones" 
     web_icon="financiera_validaciones,static/description/icon.png"
-    groups="financiera_validaciones.manager"/>
+    groups="financiera_validaciones.user"/>
     
 		<menuitem name="Validaciones" id="menu_validaciones_action" sequence="10"
 			parent="menu_validaciones" action="financiera_validacion_action"/>

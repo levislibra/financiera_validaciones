@@ -33,7 +33,7 @@
 								<field name="app_apellido" attrs="{'required': [('app_datos_personales', '=', 'aprobado')]}"/>
 								<field name="app_documento" attrs="{'required': [('app_datos_personales', '=', 'aprobado')]}"/>
 								<field name="app_nacimiento" attrs="{'required': [('app_datos_personales', '=', 'aprobado')]}"/>
-								<field name="app_datos_personales_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_personales', '!=', 'rechazado')], 'required': [('app_datos_personales', '=', 'rechazado')]}"/>
+								<field name="app_datos_personales_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_personales', '!=', 'rechazado')]}"/>
 							</group>
 							<group col="1">
 								<div>
@@ -45,7 +45,7 @@
 								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_dni_frontal', '!=', 'manual')]}"/>
 								<field name="app_dni_frontal" widget="image" class="oe_avatar" attrs="{'required': [('app_datos_dni_frontal', '=', 'aprobado')]}"/>
 								<field name="app_dni_frontal_download_name" invisible="1"/>
-								<field name="app_datos_dni_frontal_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_dni_frontal', '!=', 'rechazado')], 'required': [('app_datos_dni_frontal', '=', 'rechazado')]}"/>
+								<field name="app_datos_dni_frontal_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_dni_frontal', '!=', 'rechazado')]}"/>
 							</group>
 							<group col="1">
 								<div>
@@ -57,7 +57,7 @@
 								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_dni_posterior', '!=', 'manual')]}"/>
 								<field name="app_dni_posterior" widget="image" class="oe_avatar"
 								attrs="{'required': [('app_datos_dni_posterior', '=', 'aprobado')]}" style="border-radius: 8px;width:100px"/>
-								<field name="app_datos_dni_posterior_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_dni_posterior', '!=', 'rechazado')], 'required': [('app_datos_dni_posterior', '=', 'rechazado')]}"/>
+								<field name="app_datos_dni_posterior_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_dni_posterior', '!=', 'rechazado')]}"/>
 							</group>
 							<group col="1">
 								<div>
@@ -68,7 +68,7 @@
 								</div>
 								<label string="Esperando aprobacion manual" attrs="{'invisible': [('app_datos_selfie', '!=', 'rechazado')]}"/>
 								<field name="app_selfie" widget="image" class="oe_avatar" attrs="{'required': [('app_datos_selfie', '=', 'aprobado')]}"/>
-								<field name="app_datos_selfie_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_selfie', '!=', 'rechazado')], 'required': [('app_datos_selfie', '=', 'rechazado')]}"/>
+								<field name="app_datos_selfie_error" string="Mensaje de error" style="color:Red;margin-left:0px;" attrs="{'invisible': [('app_datos_selfie', '!=', 'rechazado')]}"/>
 							</group>
 						</group>
 						<group col="4">
@@ -76,13 +76,14 @@
 								<field name="app_datos_personales" required="1"/>
 							</group>
 							<group col="1">
-								<field name="app_datos_dni_frontal" required="1"/>
+								<field name="app_datos_dni_selfie_validacion" required="1"/>
+								<field name="app_datos_dni_frontal" invisible="1"/>
 							</group>
 							<group col="1">
-								<field name="app_datos_dni_posterior" required="1"/>
+								<field name="app_datos_dni_posterior" invisible="1"/>
 							</group>
 							<group col="1">
-								<field name="app_datos_selfie" required="1"/>
+								<field name="app_datos_selfie" invisible="1"/>
 							</group>
 						</group>
 					</sheet>

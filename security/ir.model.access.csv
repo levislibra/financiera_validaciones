@@ -1,3 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+basic_financiera_validacion_config,financiera.validacion.config,model_financiera_validacion_config,financiera_validaciones.basic,1,0,0,0
+user_financiera_validacion_config,financiera.validacion.config,model_financiera_validacion_config,financiera_validaciones.user,1,0,0,0
+manager_financiera_validacion_config,financiera.validacion.config,model_financiera_validacion_config,financiera_validaciones.manager,1,1,1,0
+
+basic_financiera_validacion,financiera.validacion,model_financiera_validacion,financiera_validaciones.basic,1,1,1,0
 user_financiera_validacion,financiera.validacion,model_financiera_validacion,financiera_validaciones.user,1,1,1,0
 manager_financiera_validacion,financiera.validacion,model_financiera_validacion,financiera_validaciones.manager,1,1,1,0

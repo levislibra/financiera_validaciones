@@ -6,9 +6,15 @@ class ExtendsResPartner(models.Model):
 	_name = 'res.partner'
 	_inherit = 'res.partner'
 
+	app_datos_dni_selfie_validacion = fields.Selection([
+		('aprobado', 'Aprobado'),
+		('rechazado', 'Rechazado')
+	], "Datos de DNI y selfie")
+
 	@api.multi
 	def ver_partner_validar_identidad(self):
 		self.ensure_one()
+		self.app_datos_dni_selfie_validacion = False
 		view_id = self.env.ref('financiera_validaciones.financiera_partner_validacion_identidad_form', False)
 		return {
 			'name': 'Validacion identidad del cliente',
@@ -22,15 +28,30 @@ class ExtendsResPartner(models.Model):
 			'target': 'new',
 		}
 
+	@api.onchange('app_datos_dni_selfie_validacion')
+	def _onchange_datos_dni_selfie(self):
+		if self.app_datos_dni_selfie_validacion == 'aprobado':
+			self.app_datos_dni_frontal = 'aprobado'
+			self.app_datos_dni_posterior = 'aprobado'
+			self.app_datos_selfie = 'aprobado'
+		else:
+			self.app_datos_dni_frontal = 'rechazado'
+			self.app_datos_dni_posterior = 'rechazado'
+			self.app_datos_selfie = 'rechazado'
+
 	@api.multi
 	def button_validar_identidad_finalizar(self):
 		if self.app_datos_personales == 'aprobado' and self.app_datos_dni_frontal == 'aprobado' \
 			and self.app_datos_dni_posterior == 'aprobado' and self.app_datos_selfie == 'aprobado':
 			self.state = 'validated'
 			self.name = self.app_apellido + " " + self.app_nombre
+			self.image = self.app_selfie
 		elif self.state == 'validated':
 			self.state = 'confirm'
-
+		if self.app_datos_dni_selfie_validacion == 'rechazado':
+			self.app_dni_frontal = None
+			self.app_dni_posterior = None
+			self.app_selfie = None
 
 	@api.multi
 	def ver_partner_validar_domicilio(self):
@@ -78,3 +99,48 @@ class ExtendsResPartner(models.Model):
 		if self.app_datos_cbu == 'aprobado':
 			self.app_cbu_validado = self.app_cbu
 			self.app_alias_validado = self.app_alias
+
+
+	@api.one
+	def button_confirmar_datos_selfie(self):
+		super(ExtendsResPartner, self).button_confirmar_datos_selfie()
+		if len(self.company_id.validaciones_config_id) > 0:
+			if self.company_id.validaciones_config_id.partner_validar_identidad_activa:
+				fv_values = {
+					'priority': 1,
+					'validation_type': 'partner_validar_identidad',
+					# 'state': 'pendiente',
+					'partner_id': self.id,
+					'company_id': self.company_id.id,
+				}
+				self.env['financiera.validacion'].create(fv_values)
+
+	@api.one
+	def button_confirmar_datos_domicilio(self):
+		super(ExtendsResPartner, self).button_confirmar_datos_domicilio()
+		if len(self.company_id.validaciones_config_id) > 0:
+			if self.company_id.validaciones_config_id.partner_validar_domicilio_activa:
+				if self.app_portal_state == 'datos_validaciones' and self.app_datos_domicilio == 'manual':
+					fv_values = {
+						'priority': 1,
+						'validation_type': 'partner_validar_domicilio',
+						# 'state': 'pendiente',
+						'partner_id': self.id,
+						'company_id': self.company_id.id,
+					}
+					self.env['financiera.validacion'].create(fv_values)
+
+	@api.one
+	def button_confirmar_datos_cbu(self):
+		super(ExtendsResPartner, self).button_confirmar_datos_cbu()
+		if len(self.company_id.validaciones_config_id) > 0:
+			if self.company_id.validaciones_config_id.partner_validar_cbu_activa:
+				if self.app_portal_state == 'datos_validaciones' and self.app_datos_cbu == 'manual':
+					fv_values = {
+						'priority': 1,
+						'validation_type': 'partner_validar_cbu',
+						# 'state': 'pendiente',
+						'partner_id': self.id,
+						'company_id': self.company_id.id,
+					}
+					self.env['financiera.validacion'].create(fv_values)

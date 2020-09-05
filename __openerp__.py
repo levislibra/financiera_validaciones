@@ -26,8 +26,10 @@
         'security/user_groups.xml',
         'security/ir.model.access.csv',
         'security/security.xml',
-        'views/financiera_validaciones.xml',
+				'views/extends_res_company.xml',
 				'views/extends_res_partner.xml',
+        'views/financiera_validaciones.xml',
+				'views/financiera_validacion_config.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

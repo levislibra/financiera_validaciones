@@ -8,16 +8,27 @@
 	  <field name="sequence">50</field>
   </record>
 
+	<record id="basic" model="res.groups">
+		<field name="name">Basico</field>
+		<field name="category_id" ref="validaicones_management"/>
+	 </record>
+
   <record id="user" model="res.groups">
-   <field name="name">Usuario</field>
+	 <field name="name">Usuario</field>
+	 <field name="implied_ids" eval="[(4, ref('basic'))]"/>
    <field name="category_id" ref="validaicones_management"/>
   </record>
 
-    <record id="manager" model="res.groups">
-     <field name="name">Administrador</field>
-     <field name="implied_ids" eval="[(4, ref('user'))]"/>
-     <field name="category_id" ref="validaicones_management"/>
-    </record>
+	<record id="manager" model="res.groups">
+		<field name="name">Administrador</field>
+		<field name="implied_ids" eval="[(4, ref('user'))]"/>
+		<field name="category_id" ref="validaicones_management"/>
+	</record>
+
+	<record id="base.group_portal" model="res.groups">
+		<field name="implied_ids" eval="[(4, ref('basic'))]"/>
+	</record>
+
 
 </data>
 </openerp>
