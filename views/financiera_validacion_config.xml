@@ -25,6 +25,7 @@
                     <field name="company_id" groups="base.group_erp_manager"/>
 										<field name="name"/>
 										<field name="partner_validar_identidad_activa"/>
+										<field name="partner_datos_personales_dni_probability_pass"/>
 										<field name="partner_validar_domicilio_activa"/>
 										<field name="partner_validar_cbu_activa"/>
                   </group>

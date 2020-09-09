@@ -29,6 +29,7 @@
 								<button name="button_procesar" type="object" string="Procesar" states="pendiente" class="oe_highlight"/>
 								<button name="button_finalizar" type="object" string="Finalizar" states="en_proceso" 
 									class="oe_highlight" confirm="Seguro que desea finalizar la Validacion?"/>
+									<!-- <button name="auto_check" type="object" string="Check" states="en_proceso" class="oe_highlight"/> -->
 								<field name="state" widget="statusbar"/>
 							</header>
               <sheet>
@@ -53,6 +54,7 @@
 										<!-- Boton de validacion -->
 										<button name="ver_partner_validar_identidad" class="oe_highlight" 
 											string="Validar identidad" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_identidad')]}"/>
+										<field name="probability_datos_personales_on_dni" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_identidad')]}"/>
 										<button name="ver_partner_validar_domicilio" class="oe_highlight" 
 											string="Validar domicilio" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_domicilio')]}"/>
 										<button name="ver_partner_validar_cbu" class="oe_highlight" 

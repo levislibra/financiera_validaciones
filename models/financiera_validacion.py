@@ -23,6 +23,7 @@ class FinancieraValidacion(models.Model):
 	], 'Estado', default='pendiente')
 	# Objeto por validar
 	partner_id = fields.Many2one('res.partner', 'Cliente')
+	probability_datos_personales_on_dni = fields.Float(related='partner_id.probability_datos_personales_on_dni', readonly=True)
 	company_id = fields.Many2one('res.company', 'Empresa')
 
 	@api.model
@@ -31,6 +32,16 @@ class FinancieraValidacion(models.Model):
 		rec.update({
 			'name': 'VAL ' + str(rec.id).zfill(8),
 		})
+		if len(rec.company_id.validaciones_config_id) > 0:
+			if rec.company_id.validaciones_config_id.partner_validar_identidad_activa:
+				rec.partner_id.auto_check_datos_personales_on_dni()
+				if rec.partner_id.probability_datos_personales_on_dni >= rec.company_id.validaciones_config_id.partner_datos_personales_dni_probability_pass:
+					# Aprobamos la validacion aunque falta comprobar la seflie con la imagen del dni
+					rec.partner_id.app_datos_personales = 'aprobado'
+					rec.partner_id.app_datos_dni_frontal = 'aprobado'
+					rec.partner_id.app_datos_dni_posterior = 'aprobado'
+					rec.partner_id.app_datos_selfie = 'aprobado'
+					rec.state = 'finalizada'
 		return rec
 
 	@api.one
@@ -63,3 +74,4 @@ class FinancieraValidacion(models.Model):
 	@api.multi
 	def ver_partner_validar_cbu(self):
 		return self.partner_id.ver_partner_validar_cbu()
+

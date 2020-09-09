@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from openerp import models, fields, api
-
+from openerp.exceptions import UserError, ValidationError
+import tempfile
+import base64
+import os
+from PIL import Image
+import pytesseract
+import numpy as np
+import cv2
 class ExtendsResPartner(models.Model):
 	_name = 'res.partner'
 	_inherit = 'res.partner'
@@ -10,6 +17,8 @@ class ExtendsResPartner(models.Model):
 		('aprobado', 'Aprobado'),
 		('rechazado', 'Rechazado')
 	], "Datos de DNI y selfie")
+	app_dni_frontal_text = fields.Char('Texto en DNI frontal')
+	probability_datos_personales_on_dni = fields.Float('Probabilidad datos personales en DNI')
 
 	@api.multi
 	def ver_partner_validar_identidad(self):
@@ -38,6 +47,30 @@ class ExtendsResPartner(models.Model):
 			self.app_datos_dni_frontal = 'rechazado'
 			self.app_datos_dni_posterior = 'rechazado'
 			self.app_datos_selfie = 'rechazado'
+
+	def image_to_text(self, img):
+		ret = None
+		# decode the base64 encoded data
+		data = base64.decodestring(img)
+		# create a temporary file, and save the image
+		fobj = tempfile.NamedTemporaryFile(delete=False)
+		fname = fobj.name
+		fobj.write(data)
+		fobj.close()
+		# open the image with PIL
+		try:
+			# image = Image.open(fname)
+			image = cv2.imread(fname, 0)
+			norm_img = np.zeros((image.shape[1], image.shape[0]))
+			image = cv2.normalize(image, norm_img, 0, 255, cv2.NORM_MINMAX)
+			image = cv2.threshold(image, 100, 255, cv2.THRESH_BINARY)[1]
+			image = cv2.GaussianBlur(image, (1, 1), 0)
+			ret = pytesseract.image_to_string(image)
+		finally:
+			# delete the file when done
+			pass
+			# os.unlink(fname)
+		return ret
 
 	@api.multi
 	def button_validar_identidad_finalizar(self):
@@ -100,7 +133,17 @@ class ExtendsResPartner(models.Model):
 			self.app_cbu_validado = self.app_cbu
 			self.app_alias_validado = self.app_alias
 
-
+	@api.multi
+	def button_confirmar_datos_dni_frontal(self):
+		if len(self.company_id.validaciones_config_id) > 0:
+			if self.company_id.validaciones_config_id.partner_validar_identidad_activa:
+				self.auto_check_datos_personales_on_dni()
+				if self.probability_datos_personales_on_dni < self.company_id.validaciones_config_id.partner_datos_personales_dni_probability_pass:
+					self.app_dni_frontal = None
+					self.app_datos_dni_frontal_error = "Intente nuevamente. Evite reflejos en la imagen y que sea lo mas nitida posible."
+					return self.wizard_datos_dni_frontal()
+		return super(ExtendsResPartner, self).button_confirmar_datos_dni_frontal()
+		
 	@api.one
 	def button_confirmar_datos_selfie(self):
 		super(ExtendsResPartner, self).button_confirmar_datos_selfie()
@@ -114,6 +157,8 @@ class ExtendsResPartner(models.Model):
 					'company_id': self.company_id.id,
 				}
 				self.env['financiera.validacion'].create(fv_values)
+				# self.app_dni_frontal_text = self.image_to_text(self.app_dni_frontal)
+				# validacion_id.auto_check()
 
 	@api.one
 	def button_confirmar_datos_domicilio(self):
@@ -144,3 +189,41 @@ class ExtendsResPartner(models.Model):
 						'company_id': self.company_id.id,
 					}
 					self.env['financiera.validacion'].create(fv_values)
+
+	def normalize(self, s):
+		replacements = (
+				("á", "a"),
+				("é", "e"),
+				("í", "i"),
+				("ó", "o"),
+				("ú", "u"),
+		)
+		for a, b in replacements:
+				s = s.replace(a, b).replace(a.upper(), b.upper())
+		return s.upper()
+
+	@api.one
+	def auto_check_datos_personales_on_dni(self):
+		self.app_dni_frontal_text = self.image_to_text(self.app_dni_frontal)
+		values_check = self.normalize(self.app_nombre).split(' ')
+		values_check.extend(self.normalize(self.app_apellido).split(' '))
+		values_check.append(self.app_documento.replace('.', ''))
+		print("values_check: ", values_check)
+		for string in values_check:
+			i = 0
+			while i <= (len(string)-3):
+				values_check.append(string[i:i+2])
+				i = i + 1
+		print("SUB values_check: ", values_check)
+		# print("SUB values_check remove duplicate: ", dict.fromkeys(values_check))
+		dni_text = self.app_dni_frontal_text.replace('.', '')
+		print("dni_text: ", dni_text)
+		occurrence = 0.0
+		for string in values_check:
+			partial_ocurrence = min(dni_text.count(string), 2)
+			occurrence += partial_ocurrence
+			print("	buscamos: ", string)
+			print("	partial_ocurrence:: ", partial_ocurrence)
+		print("OCCURRENCE:: ", occurrence)
+		self.probability_datos_personales_on_dni = occurrence/(2.0*len(values_check))
+		print("PROBABILITY:: ", self.probability_datos_personales_on_dni)
