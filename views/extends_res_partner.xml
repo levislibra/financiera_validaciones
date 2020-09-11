@@ -221,5 +221,19 @@
 		</record>
 
 
+		<!-- DEBUG -->
+		<record id="app_dni_frontal_form_inherited"  model="ir.ui.view">
+			<field name="name">App DNI Extension form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="financiera_app.datos_dni_frontal_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//div[@id='result']" position='after'>
+					<field name="app_dni_frontal_text" readonly="1"/>
+					<button name="auto_check_datos_personales_on_dni" string="Update" type="object"/>
+					<field name="probability_datos_personales_on_dni" readonly="1"/>
+				</xpath>
+			</field>
+		</record>
+
 	</data>
 </openerp>

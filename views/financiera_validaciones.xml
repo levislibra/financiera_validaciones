@@ -51,10 +51,13 @@
 										<field name="validation_type" attrs="{'readonly': [('state', '!=', 'en_proceso')]}"/>
 										<!-- Objeto por validar -->
 										<field name="partner_id" attrs="{'readonly': [('state', '!=', 'en_proceso')]}"/>
-										<!-- Boton de validacion -->
+										<!-- Boton de validacion identidad -->
+										<button name="button_auto_check_datos_personales_on_dni" class="oe_highlight" 
+											string="Comprobacion automatica" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_identidad')]}"/>
 										<button name="ver_partner_validar_identidad" class="oe_highlight" 
-											string="Validar identidad" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_identidad')]}"/>
+											string="Validar identidad manual" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_identidad')]}"/>
 										<field name="probability_datos_personales_on_dni" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_identidad')]}"/>
+										<!-- Boton validar domicilio -->
 										<button name="ver_partner_validar_domicilio" class="oe_highlight" 
 											string="Validar domicilio" type="object" attrs="{'invisible': ['|', ('state', '!=', 'en_proceso'), ('validation_type', '!=', 'partner_validar_domicilio')]}"/>
 										<button name="ver_partner_validar_cbu" class="oe_highlight" 

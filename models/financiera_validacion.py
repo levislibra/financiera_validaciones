@@ -76,3 +76,6 @@ class FinancieraValidacion(models.Model):
 	def ver_partner_validar_cbu(self):
 		return self.partner_id.ver_partner_validar_cbu()
 
+	@api.one
+	def button_auto_check_datos_personales_on_dni(self):
+		self.partner_id.auto_check_datos_personales_on_dni()
