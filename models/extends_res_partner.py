@@ -221,7 +221,6 @@ class ExtendsResPartner(models.Model):
 		dni_text = self.app_dni_frontal_text.replace('.', '')
 		occurrence = 0.0
 		for string in values_check:
-			# partial_ocurrence = min(dni_text.count(string), 2)
 			if string in dni_text:
 				occurrence += 1.0
 		self.probability_datos_personales_on_dni = occurrence/(1.0*len(values_check))
