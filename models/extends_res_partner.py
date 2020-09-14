@@ -202,28 +202,26 @@ class ExtendsResPartner(models.Model):
 				s = s.replace(a, b).replace(a.upper(), b.upper())
 		return s.upper()
 
+	@api.multi
+	def button_auto_check_datos_personales_on_dni(self):
+		self.auto_check_datos_personales_on_dni()
+		return {'type': 'ir.actions.do_nothing'}
+
 	@api.one
 	def auto_check_datos_personales_on_dni(self):
 		self.app_dni_frontal_text = self.image_to_text(self.app_dni_frontal)
 		values_check = self.normalize(self.app_nombre).split(' ')
 		values_check.extend(self.normalize(self.app_apellido).split(' '))
 		values_check.append(self.app_documento.replace('.', ''))
-		print("values_check: ", values_check)
 		for string in values_check:
 			i = 0
 			while i <= (len(string)-3):
 				values_check.append(string[i:i+2])
 				i = i + 1
-		print("SUB values_check: ", values_check)
-		# print("SUB values_check remove duplicate: ", dict.fromkeys(values_check))
 		dni_text = self.app_dni_frontal_text.replace('.', '')
-		print("dni_text: ", dni_text)
 		occurrence = 0.0
 		for string in values_check:
-			partial_ocurrence = min(dni_text.count(string), 2)
-			occurrence += partial_ocurrence
-			print("	buscamos: ", string)
-			print("	partial_ocurrence:: ", partial_ocurrence)
-		print("OCCURRENCE:: ", occurrence)
-		self.probability_datos_personales_on_dni = occurrence/(2.0*len(values_check))
-		print("PROBABILITY:: ", self.probability_datos_personales_on_dni)
+			# partial_ocurrence = min(dni_text.count(string), 2)
+			if string in dni_text:
+				occurrence += 1.0
+		self.probability_datos_personales_on_dni = occurrence/(1.0*len(values_check))
