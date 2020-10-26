@@ -145,8 +145,8 @@ class ExtendsResPartner(models.Model):
 		return super(ExtendsResPartner, self).button_confirmar_datos_dni_frontal()
 		
 	@api.one
-	def button_confirmar_datos_selfie(self):
-		super(ExtendsResPartner, self).button_confirmar_datos_selfie()
+	def button_confirmar_datos_dni_selfie_upload(self):
+		super(ExtendsResPartner, self).button_confirmar_datos_dni_selfie_upload()
 		if len(self.company_id.validaciones_config_id) > 0:
 			if self.company_id.validaciones_config_id.partner_validar_identidad_activa:
 				fv_values = {
