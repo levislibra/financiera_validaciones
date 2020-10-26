@@ -42,7 +42,7 @@ class FinancieraValidacion(models.Model):
 					rec.partner_id.app_datos_dni_posterior = 'aprobado'
 					rec.partner_id.app_datos_selfie = 'aprobado'
 					rec.state = 'finalizada'
-					rec.active = 'false'
+					rec.active = False
 		return rec
 
 	@api.one
