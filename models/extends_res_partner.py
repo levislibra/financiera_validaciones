@@ -50,6 +50,8 @@ class ExtendsResPartner(models.Model):
 
 	def image_to_text(self, img):
 		ret = None
+		if img == None or img == False:
+			raise ValidationError("DNI no cargado.")
 		# decode the base64 encoded data
 		data = base64.decodestring(img)
 		# create a temporary file, and save the image

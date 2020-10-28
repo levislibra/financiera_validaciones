@@ -42,7 +42,7 @@ class FinancieraValidacion(models.Model):
 					rec.partner_id.app_datos_dni_posterior = 'aprobado'
 					rec.partner_id.app_datos_selfie = 'aprobado'
 					rec.state = 'finalizada'
-					rec.active = False
+					# rec.active = False
 		return rec
 
 	@api.one
@@ -57,9 +57,13 @@ class FinancieraValidacion(models.Model):
 	def button_finalizar(self):
 		if self.state == 'en_proceso':
 			self.state = 'finalizada'
-			self.active = False
+			# self.active = False
 		else:
 			raise UserError('Para finalizar la validacion, la misma debe estar en proceso.')
+
+	@api.one
+	def button_editar(self):
+		self.state = 'en_proceso'
 
 	# Validar identidad del cliente
 	@api.multi

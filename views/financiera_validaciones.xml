@@ -26,6 +26,8 @@
         <field name="arch" type="xml">
             <form string="Validaciones">
 							<header>
+								<button name="button_editar" type="object" string="Editar" states="finalizada" class="oe_highlight" 
+									confirm="Seguro que desea editar la Validacion?"/>
 								<button name="button_procesar" type="object" string="Procesar" states="pendiente" class="oe_highlight"/>
 								<button name="button_finalizar" type="object" string="Finalizar" states="en_proceso" 
 									class="oe_highlight" confirm="Seguro que desea finalizar la Validacion?"/>
