@@ -154,7 +154,7 @@ class ExtendsResPartner(models.Model):
 				fv_values = {
 					'priority': 1,
 					'validation_type': 'partner_validar_identidad',
-					# 'state': 'pendiente',
+					'state': 'pendiente',
 					'partner_id': self.id,
 					'company_id': self.company_id.id,
 				}
@@ -171,7 +171,7 @@ class ExtendsResPartner(models.Model):
 					fv_values = {
 						'priority': 1,
 						'validation_type': 'partner_validar_domicilio',
-						# 'state': 'pendiente',
+						'state': 'pendiente',
 						'partner_id': self.id,
 						'company_id': self.company_id.id,
 					}
@@ -186,7 +186,7 @@ class ExtendsResPartner(models.Model):
 					fv_values = {
 						'priority': 1,
 						'validation_type': 'partner_validar_cbu',
-						# 'state': 'pendiente',
+						'state': 'pendiente',
 						'partner_id': self.id,
 						'company_id': self.company_id.id,
 					}
