@@ -6,7 +6,7 @@ import tempfile
 import base64
 import os
 from PIL import Image
-import pytesseract
+# import pytesseract
 import numpy as np
 import cv2
 class ExtendsResPartner(models.Model):
@@ -67,7 +67,7 @@ class ExtendsResPartner(models.Model):
 			image = cv2.normalize(image, norm_img, 0, 255, cv2.NORM_MINMAX)
 			image = cv2.threshold(image, 100, 255, cv2.THRESH_BINARY)[1]
 			image = cv2.GaussianBlur(image, (1, 1), 0)
-			ret = pytesseract.image_to_string(image)
+			# ret = pytesseract.image_to_string(image)
 		finally:
 			# delete the file when done
 			pass
